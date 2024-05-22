@@ -1,0 +1,6 @@
+@ExcelBdPatientManagment_HostAddress = http://localhost:5150
+
+GET {{ExcelBdPatientManagment_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
