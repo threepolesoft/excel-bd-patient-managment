@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Common.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace API.DbContexts
         /// The dataset for the tables.
         /// </summary>
 
-
+        public DbSet<User> User => Set<User>();
 
         /// <summary>
         /// Do any database initialization required.
