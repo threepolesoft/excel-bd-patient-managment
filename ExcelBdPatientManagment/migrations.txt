@@ -1,0 +1,3 @@
+﻿dotnet tool install --global dotnet-ef
+dotnet ef migrations add _
+dotnet ef database update

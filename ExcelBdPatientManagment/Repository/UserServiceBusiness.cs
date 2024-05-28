@@ -22,6 +22,8 @@ namespace API.Repository
             string status = ActionStatus.Success;
             string param = string.Format(" and uMob='{0}'", id);
 
+            //User user = _appDbContext.User.ToList().FirstOrDefault();
+
             //string query = string.Format("SELECT * FROM `tps_users` where 1=1 {0}", Utils.InjectionChecker(param));
 
             //MySqlDataAdapter sdaCustomer = new MySqlDataAdapter(query, Utils.ConnectRudo());

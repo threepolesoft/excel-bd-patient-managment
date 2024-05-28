@@ -4,6 +4,8 @@ using API.Repository.Interface;
 using Common.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +22,7 @@ IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
     .Build();
 
-var connectionString = configuration.GetConnectionString("DefaultConnection");
+var connectionString = configuration.GetConnectionString("DefaultConnection_Dev");
 
 
 if (connectionString == null)
@@ -32,6 +34,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString));
 
 
+// Register HttpClient with custom certificate validation
+builder.Services.AddHttpClient("MySecureClient")
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        var handler = new HttpClientHandler();
+        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+        {
+            return ValidateServerCertificate(cert, chain, errors);
+        };
+        return handler;
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -42,8 +56,6 @@ if (app.Environment.IsDevelopment())
 }
 
 
-
-//builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 using (var scope = app.Services.CreateScope())
 {
@@ -58,3 +70,14 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+
+static bool ValidateServerCertificate(X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+{
+    if (sslPolicyErrors == SslPolicyErrors.None)
+        return true;
+
+    // Custom certificate validation logic here
+    var trustedThumbprint = "YOUR_TRUSTED_CERTIFICATE_THUMBPRINT";
+    return certificate.Thumbprint.Equals(trustedThumbprint, StringComparison.OrdinalIgnoreCase);
+}
