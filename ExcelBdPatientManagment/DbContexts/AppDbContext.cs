@@ -17,7 +17,7 @@ namespace API.DbContexts
         /// The dataset for the tables.
         /// </summary>
 
-       
+        public DbSet<ApplicationUser> Users => Set<ApplicationUser>();
         public DbSet<Allergies> Allergies => Set<Allergies>();
         public DbSet<AllergiesDetails> AllergiesDetails => Set<AllergiesDetails>();
         public DbSet<DiseaseInformation> DiseaseInformation => Set<DiseaseInformation>();

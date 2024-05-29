@@ -4,7 +4,10 @@ namespace Common.Models
 {
     public class LoginModelReq
     {
+        [JsonPropertyName("UserName")]
         public string UserName { get; set; }
+
+        [JsonPropertyName("Password")]
         public string Password { get; set; }
     }
 

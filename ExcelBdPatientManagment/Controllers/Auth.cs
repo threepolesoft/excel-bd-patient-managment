@@ -44,7 +44,7 @@ namespace API.Controllers
             {
                 res.Status = true;
                 res.Message = ActionStatus.Success;
-                res.Data = userService.User(token.GetUserIdFromToken(getToken));
+                res.Data = userService.UserByUserName(token.GetUserIdFromToken(getToken));
                 return StatusCode((int)StatusCodes.Status200OK, res);
             }
             catch (Exception ex)
@@ -88,7 +88,6 @@ namespace API.Controllers
                     res.Message = status;
                     return StatusCode((int)StatusCodes.Status200OK, res);
                 }
-
 
             }
             catch (Exception ex)

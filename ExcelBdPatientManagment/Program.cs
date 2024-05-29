@@ -35,16 +35,16 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 // Register HttpClient with custom certificate validation
-builder.Services.AddHttpClient("MySecureClient")
-    .ConfigurePrimaryHttpMessageHandler(() =>
-    {
-        var handler = new HttpClientHandler();
-        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
-        {
-            return ValidateServerCertificate(cert, chain, errors);
-        };
-        return handler;
-    });
+//builder.Services.AddHttpClient("MySecureClient")
+//    .ConfigurePrimaryHttpMessageHandler(() =>
+//    {
+//        var handler = new HttpClientHandler();
+//        handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+//        {
+//            return ValidateServerCertificate(cert, chain, errors);
+//        };
+//        return handler;
+//    });
 
 var app = builder.Build();
 

@@ -6,4 +6,23 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\assets\fonts\boxicons.woff2" />
+    <None Include="wwwroot\assets\fonts\materialdesignicons-webfont.woff2" />
+    <None Include="wwwroot\assets\fonts\remixicon.woff2" />
+    <None Include="wwwroot\assets\js\app.js" />
+    <None Include="wwwroot\assets\js\pages\index.init.js" />
+    <None Include="wwwroot\assets\libs\%40simonwep\pickr\pickr.min.js" />
+    <None Include="wwwroot\assets\libs\bootstrap\js\bootstrap.bundle.min.js" />
+    <None Include="wwwroot\assets\libs\fg-emoji-picker\fgEmojiPicker.js" />
+    <None Include="wwwroot\assets\libs\glightbox\js\glightbox.min.js" />
+    <None Include="wwwroot\assets\libs\node-waves\waves.min.js" />
+    <None Include="wwwroot\assets\libs\simplebar\simplebar.min.js" />
+    <None Include="wwwroot\assets\libs\swiper\swiper-bundle.min.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
+  </ItemGroup>
+
 </Project>

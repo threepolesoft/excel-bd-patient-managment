@@ -2,3 +2,9 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+function getToken() {
+
+    return document.getElementsByTagName("__RequestVerificationToken").value;
+
+}

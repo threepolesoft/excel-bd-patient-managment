@@ -1,0 +1,118 @@
+﻿<div class="row mt-3">
+
+    <div class="col-md-3">
+
+        <input type="text"
+               id="newNcd"
+               class="form-control" placeholder="NCD Name" />
+
+    </div>
+
+    <div class="col-md-2">
+
+        <button type="button"
+                id="saveNcd"
+                data-id="0"
+                class="btn btn-success disabled">
+            Save
+        </button>
+
+    </div>
+
+</div>
+
+<div class="row  mt-2">
+
+    <div class="col-md-12">
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>Mark</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger"><i class="fa fa-pen"></i></button>
+                        <button type="button" class="btn btn-warning"><i class="fa fa-trash"</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>Jacob</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger"><i class="fa fa-pen"></i></button>
+                        <button type="button" class="btn btn-warning"><i class="fa fa-trash"</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>Larry</td>
+                    <td class="text-center">
+                        <button type="button" class="btn btn-danger"><i class="fa fa-pen"></i></button>
+                        <button type="button" class="btn btn-warning"><i class="fa fa-trash"</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    $(document).ready(function (e) {
+
+        $(document).on("keyup", "#newNcd", function (e) {
+
+
+            if ($(this).val().trim() == "") {
+
+                $("#saveNcd").addClass("disabled");
+
+            } else {
+
+                $("#saveNcd").removeClass("disabled");
+            }
+
+        });
+
+
+        $(document).on("click", "#saveNcd", function (e) {
+
+
+            var data = {
+                ID: 4,
+                Name: "ddd"
+            }
+
+            debugger;
+
+            $.ajax({
+                url: '@Url.Action("NcdSave", "Home")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: data,
+                success: function (response) {
+                    debugger;
+                },
+                error: function (xhr, status, error) {
+                    $('#result').html('<p>An error occurred: ' + error + '</p>');
+                }
+            });
+
+        });
+    });
+
+
+ 
+
+</script>

@@ -11,7 +11,7 @@ namespace Common.Models.DbSet
     {
         [Key]
         public long ID { get; set; }
-        public long? Name { get; set; }
+        public string? Name { get; set; }
 
         // common field
         public DateTime? EntryDate { get; set; }
