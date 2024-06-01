@@ -73,7 +73,7 @@ namespace API.Controllers
             {
                 ApplicationUser applicationUser = userService.UserByUserName(token.GetUserIdFromToken(getToken));
 
-                string status = _allergies.Save(new Allergies
+                string status = _allergies.Save(new AllergiesModel
                 {
                     ID = allergiesReqModel.ID,
                     Name = allergiesReqModel.Name,

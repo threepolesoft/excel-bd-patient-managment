@@ -33,8 +33,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EntryUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("EntryUser")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -42,8 +42,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdateUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("UpdateUser")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ID");
 
@@ -64,8 +64,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EntryUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("EntryUser")
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("PatientID")
                         .HasColumnType("bigint");
@@ -73,8 +73,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdateUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("UpdateUser")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ID");
 
@@ -103,7 +103,7 @@ namespace API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("ApplicationUser");
                 });
 
             modelBuilder.Entity("Common.Models.DbSet.DiseaseInformation", b =>
@@ -121,7 +121,6 @@ namespace API.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")

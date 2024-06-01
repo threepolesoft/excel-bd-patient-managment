@@ -19,9 +19,9 @@ namespace API.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EntryUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EntryUser = table.Column<long>(type: "bigint", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateUser = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UpdateUser = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,13 +37,28 @@ namespace API.Migrations
                     PatientID = table.Column<long>(type: "bigint", nullable: true),
                     AllergiesID = table.Column<long>(type: "bigint", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EntryUser = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EntryUser = table.Column<long>(type: "bigint", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UpdateUser = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    UpdateUser = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AllergiesDetails", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUser",
+                columns: table => new
+                {
+                    ID = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUser", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -52,7 +67,7 @@ namespace API.Migrations
                 {
                     ID = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EntryUser = table.Column<long>(type: "bigint", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -69,7 +84,7 @@ namespace API.Migrations
                 {
                     ID = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<long>(type: "bigint", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EntryUser = table.Column<long>(type: "bigint", nullable: true),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -125,6 +140,9 @@ namespace API.Migrations
 
             migrationBuilder.DropTable(
                 name: "AllergiesDetails");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUser");
 
             migrationBuilder.DropTable(
                 name: "DiseaseInformation");

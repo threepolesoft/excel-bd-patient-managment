@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240528142529__init")]
+    [Migration("20240601110355__init")]
     partial class _init
     {
         /// <inheritdoc />
@@ -36,8 +36,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EntryUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("EntryUser")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -45,8 +45,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdateUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("UpdateUser")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ID");
 
@@ -67,8 +67,8 @@ namespace API.Migrations
                     b.Property<DateTime?>("EntryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EntryUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("EntryUser")
+                        .HasColumnType("bigint");
 
                     b.Property<long?>("PatientID")
                         .HasColumnType("bigint");
@@ -76,12 +76,37 @@ namespace API.Migrations
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UpdateUser")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<long?>("UpdateUser")
+                        .HasColumnType("bigint");
 
                     b.HasKey("ID");
 
                     b.ToTable("AllergiesDetails");
+                });
+
+            modelBuilder.Entity("Common.Models.DbSet.ApplicationUser", b =>
+                {
+                    b.Property<long>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("ID"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("ApplicationUser");
                 });
 
             modelBuilder.Entity("Common.Models.DbSet.DiseaseInformation", b =>
@@ -99,7 +124,6 @@ namespace API.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")
@@ -127,8 +151,8 @@ namespace API.Migrations
                     b.Property<long?>("EntryUser")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("Name")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdateDate")
                         .HasColumnType("datetime2");

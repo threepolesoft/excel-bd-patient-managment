@@ -22,7 +22,7 @@ namespace API.Repository
         {
             string status = ActionStatus.Success;
 
-            ApplicationUser user = _appDbContext.Users.Where(m => m.UserName == id && m.Password == pass).ToList().FirstOrDefault();
+            ApplicationUser user = _appDbContext.ApplicationUser.Where(m => m.UserName == id && m.Password == pass).ToList().FirstOrDefault();
 
             if (user != null)
             {
@@ -39,7 +39,7 @@ namespace API.Repository
         public ApplicationUser UserByUserName(string UserName)
         {
 
-            ApplicationUser applicationUser = _appDbContext.Users.Where(m => m.UserName == UserName).ToList().FirstOrDefault();
+            ApplicationUser applicationUser = _appDbContext.ApplicationUser.Where(m => m.UserName == UserName).ToList().FirstOrDefault();
 
             return applicationUser;
         }

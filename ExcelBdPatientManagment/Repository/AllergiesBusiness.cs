@@ -16,24 +16,48 @@ namespace API.Repository
         }
 
 
-        public List<Allergies> GetAll()
+        public List<AllergiesModel> GetAll()
         {
-            return _appDbContext.Allergies.ToList();
+            return _appDbContext.Allergies.Select(m=>new AllergiesModel
+            {
+                ID = m.ID,
+                Name = m.Name,
+                EntryUser = m.EntryUser,
+                EntryDate = m.EntryDate,
+                UpdateUser = m.UpdateUser,
+                UpdateDate = m.UpdateDate,  
+            }).ToList();
         }
 
-        public Allergies GetAllergiesByID(long ID)
+        public AllergiesModel GetAllergiesByID(long ID)
         {
 
-            return _appDbContext.Allergies.Where(m => m.ID == ID).FirstOrDefault();
+            return _appDbContext.Allergies.Where(m => m.ID == ID).Select(m=>new AllergiesModel
+            {
+                ID = m.ID,
+                Name = m.Name,
+                EntryUser = m.EntryUser,
+                EntryDate = m.EntryDate,
+                UpdateUser = m.UpdateUser,
+                UpdateDate = m.UpdateDate,
+            }).FirstOrDefault();
 
         }
 
-        public Allergies GetAllergiesByName(string Name)
+        public AllergiesModel GetAllergiesByName(string Name)
         {
-            return _appDbContext.Allergies.Where(m => m.Name == Name).FirstOrDefault();
+            return _appDbContext.Allergies.Where(m => m.Name == Name).Select(m => new AllergiesModel
+            {
+                ID = m.ID,
+                Name = m.Name,
+                EntryUser = m.EntryUser,
+                EntryDate = m.EntryDate,
+                UpdateUser = m.UpdateUser,
+                UpdateDate = m.UpdateDate,
+            }).FirstOrDefault();
         }
 
-        public string Save(Allergies allergies)
+        public string Save(AllergiesModel allergies)
         {
 
             string status = ActionStatus.Success;
@@ -42,12 +66,20 @@ namespace API.Repository
             {
                 if (GetAllergiesByName(allergies.Name) == null)
                 {
-                    Allergies allergies1 = GetAllergiesByID(allergies.ID);
+                    AllergiesModel allergies1 = GetAllergiesByID(allergies.ID);
 
                     allergies1.Name = allergies.Name;
                     allergies1.UpdateDate = DateTime.Now;
 
-                    _appDbContext.Update(allergies1);
+                    _appDbContext.Allergies.Update(new Allergies
+                    {
+                        ID = allergies1.ID,
+                        Name = allergies1.Name,
+                        EntryUser = allergies1.EntryUser,
+                        EntryDate = allergies1.EntryDate,
+                        UpdateUser = allergies1.UpdateUser,
+                        UpdateDate = allergies1.UpdateDate,
+                    });
 
                     if (_appDbContext.SaveChanges() == 0)
                     {
@@ -66,7 +98,15 @@ namespace API.Repository
                     allergies.UpdateDate = null;
                     allergies.UpdateUser = null;
 
-                    _appDbContext.Add(allergies);
+                    _appDbContext.Allergies.Add(new Allergies
+                    {
+                        ID = allergies.ID,
+                        Name = allergies.Name,
+                        EntryUser = allergies.EntryUser,
+                        EntryDate = allergies.EntryDate,
+                        UpdateUser = allergies.UpdateUser,
+                        UpdateDate = allergies.UpdateDate,
+                    });
 
                     if (_appDbContext.SaveChanges() == 0)
                     {
@@ -87,7 +127,23 @@ namespace API.Repository
 
         public bool Delete(long ID)
         {
-            _appDbContext.Allergies.Remove(GetAllergiesByID(ID));
+
+            AllergiesModel allergiesModel = GetAllergiesByID(ID);
+
+            if (allergiesModel!=null)
+            {
+                _appDbContext.Allergies.Remove(new Allergies
+                {
+                    ID = allergiesModel.ID,
+                    Name = allergiesModel.Name,
+                    EntryUser = allergiesModel.EntryUser,
+                    EntryDate = allergiesModel.EntryDate,
+                    UpdateUser = allergiesModel.UpdateUser,
+                    UpdateDate = allergiesModel.UpdateDate,
+                });
+            }
+
+
 
             if (_appDbContext.SaveChanges() == 1)
             {

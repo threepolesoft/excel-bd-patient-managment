@@ -6,24 +6,30 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Common.Models.DbSet
+namespace Common.Models
 {
-    public class NCDDetails
+    public class PatientsModel
     {
-        [Key]
+        [JsonPropertyName("ID")]
         public long ID { get; set; }
 
-        public long? PatientID { get; set; }
+        [JsonPropertyName("PatientName")]
+        public string PatientName { get; set; }
 
-        public long? NCDID { get; set; }
+        [JsonPropertyName("DiseaseInformationID")]
+        public long DiseaseInformationID { get; set; }
 
         // common field
+        [JsonPropertyName("EntryDate")]
         public DateTime? EntryDate { get; set; }
 
+        [JsonPropertyName("EntryUser")]
         public long? EntryUser { get; set; }
 
+        [JsonPropertyName("UpdateDate")]
         public DateTime? UpdateDate { get; set; }
 
+        [JsonPropertyName("UpdateUser")]
         public long? UpdateUser { get; set; }
     }
 }

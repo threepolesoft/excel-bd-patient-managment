@@ -1,13 +1,14 @@
-﻿using Common.Models.DbSet;
+﻿using Common.Models;
+using Common.Models.DbSet;
 
 namespace API.Repository.Interface
 {
     public interface INCD
     {
-        NCD GetNCDByID(long ID);
-        NCD GetNCDByName(string Name);
-        string Save(NCD nCD);
-        List<NCD> GetAll();
+        NCDModel GetNCDByID(long ID);
+        NCDModel GetNCDByName(string Name);
+        string Save(NCDModel nCD);
+        List<NCDModel> GetAll();
         bool Delete(long ID);
     }
 }

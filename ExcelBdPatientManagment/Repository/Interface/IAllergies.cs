@@ -1,13 +1,14 @@
-﻿using Common.Models.DbSet;
+﻿using Common.Models;
+using Common.Models.DbSet;
 
 namespace API.Repository.Interface
 {
     public interface IAllergies
     {
-        Allergies GetAllergiesByID(long ID);
-        Allergies GetAllergiesByName(string Name);
-        string Save(Allergies nCD);
-        List<Allergies> GetAll();
+        AllergiesModel GetAllergiesByID(long ID);
+        AllergiesModel GetAllergiesByName(string Name);
+        string Save(AllergiesModel nCD);
+        List<AllergiesModel> GetAll();
         bool Delete(long ID);
     }
 }

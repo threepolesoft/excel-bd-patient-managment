@@ -73,7 +73,7 @@ namespace API.Controllers
             {
                 ApplicationUser applicationUser = userService.UserByUserName(token.GetUserIdFromToken(getToken));
 
-                string status = _nCD.Save(new NCD
+                string status = _nCD.Save(new NCDModel
                 {
                     ID = nCDReqModel.ID,
                     Name = nCDReqModel.Name,

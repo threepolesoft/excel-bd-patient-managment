@@ -15,24 +15,48 @@ namespace API.Repository
             _appDbContext = appDbContext;
         }
 
-        public List<NCD> GetAll()
+        public List<NCDModel> GetAll()
         {
-            return _appDbContext.NCD.ToList();
+            return _appDbContext.NCD.Select(m=>new NCDModel
+            {
+                ID = m.ID,
+                Name = m.Name,
+                EntryUser = m.EntryUser,
+                EntryDate = m.EntryDate,
+                UpdateUser = m.UpdateUser,
+                UpdateDate = m.UpdateDate,
+            }).ToList();
         }
 
-        public NCD GetNCDByID(long ID)
+        public NCDModel GetNCDByID(long ID)
         {
 
-            return _appDbContext.NCD.Where(m => m.ID == ID).FirstOrDefault();
+            return _appDbContext.NCD.Where(m => m.ID == ID).Select(m => new NCDModel
+            {
+                ID = m.ID,
+                Name = m.Name,
+                EntryUser = m.EntryUser,
+                EntryDate = m.EntryDate,
+                UpdateUser = m.UpdateUser,
+                UpdateDate = m.UpdateDate,
+            }).FirstOrDefault();
 
         }
 
-        public NCD GetNCDByName(string Name)
+        public NCDModel GetNCDByName(string Name)
         {
-            return _appDbContext.NCD.Where(m => m.Name == Name).FirstOrDefault();
+            return _appDbContext.NCD.Where(m => m.Name == Name).Select(m => new NCDModel
+            {
+                ID = m.ID,
+                Name = m.Name,
+                EntryUser = m.EntryUser,
+                EntryDate = m.EntryDate,
+                UpdateUser = m.UpdateUser,
+                UpdateDate = m.UpdateDate,
+            }).FirstOrDefault();
         }
 
-        public string Save(NCD nCD)
+        public string Save(NCDModel nCD)
         {
 
             string status = ActionStatus.Success;
@@ -41,12 +65,20 @@ namespace API.Repository
             {
                 if (GetNCDByName(nCD.Name) == null)
                 {
-                    NCD nCD1 = GetNCDByID(nCD.ID);
+                    NCDModel nCD1 = GetNCDByID(nCD.ID);
 
                     nCD1.Name = nCD.Name;
                     nCD1.UpdateDate = DateTime.Now;
 
-                    _appDbContext.Update(nCD1);
+                    _appDbContext.NCD.Update(new NCD
+                    {
+                        ID = nCD1.ID,
+                        Name = nCD1.Name,
+                        EntryUser = nCD1.EntryUser,
+                        EntryDate = nCD1.EntryDate,
+                        UpdateUser = nCD1.UpdateUser,
+                        UpdateDate = nCD1.UpdateDate,
+                    });
 
                     if (_appDbContext.SaveChanges() == 0)
                     {
@@ -65,7 +97,15 @@ namespace API.Repository
                     nCD.UpdateDate = null;
                     nCD.UpdateUser = null;
 
-                    _appDbContext.Add(nCD);
+                    _appDbContext.NCD.Add(new NCD
+                    {
+                        ID = nCD.ID,
+                        Name = nCD.Name,
+                        EntryUser = nCD.EntryUser,
+                        EntryDate = nCD.EntryDate,
+                        UpdateUser = nCD.UpdateUser,
+                        UpdateDate = nCD.UpdateDate,
+                    });
 
                     if (_appDbContext.SaveChanges() == 0)
                     {
@@ -86,7 +126,21 @@ namespace API.Repository
 
         public bool Delete(long ID)
         {
-            _appDbContext.NCD.Remove(GetNCDByID(ID));
+
+            NCDModel model = GetNCDByID(ID);
+
+            if (model!=null)
+            {
+                _appDbContext.NCD.Remove(new NCD
+                {
+                    ID = model.ID,
+                    Name = model.Name,
+                    EntryUser = model.EntryUser,
+                    EntryDate = model.EntryDate,
+                    UpdateUser = model.UpdateUser,
+                    UpdateDate = model.UpdateDate,
+                });
+            }
 
             if (_appDbContext.SaveChanges()==1)
             {

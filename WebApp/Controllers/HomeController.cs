@@ -199,7 +199,7 @@ namespace WebApp.Controllers
 
                 try
                 {
-                    string url = string.Format("{0}/api/NCD/{1}", Utils.BaseUrl, id);
+                    string url = string.Format("{0}/api/Allergies/{1}", Utils.BaseUrl, id);
 
                     HttpClient httpClient = new HttpClient();
 
