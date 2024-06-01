@@ -2,6 +2,7 @@
 using API.Repository.Interface;
 using Common.Models;
 using Common.Models.DbSet;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository
 {
@@ -12,6 +13,11 @@ namespace API.Repository
         public NCDBusiness(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
+        }
+
+        public List<NCD> GetAll()
+        {
+            return _appDbContext.NCD.ToList();
         }
 
         public NCD GetNCDByID(long ID)
@@ -33,17 +39,24 @@ namespace API.Repository
 
             if (nCD.ID > 0)
             {
-                NCD nCD1 = GetNCDByID(nCD.ID);
-
-                nCD1.Name = nCD.Name;
-                nCD1.UpdateDate = DateTime.Now;
-
-                _appDbContext.Update(nCD1);
-
-                if (_appDbContext.SaveChanges() == 0)
+                if (GetNCDByName(nCD.Name) == null)
                 {
-                    status = ActionStatus.Fail;
-                };
+                    NCD nCD1 = GetNCDByID(nCD.ID);
+
+                    nCD1.Name = nCD.Name;
+                    nCD1.UpdateDate = DateTime.Now;
+
+                    _appDbContext.Update(nCD1);
+
+                    if (_appDbContext.SaveChanges() == 0)
+                    {
+                        status = ActionStatus.Fail;
+                    };
+                }
+                else
+                {
+                    status = "This NCD already exsit";
+                }
             }
             else
             {
@@ -69,6 +82,18 @@ namespace API.Repository
 
             return status;
 
+        }
+
+        public bool Delete(long ID)
+        {
+            _appDbContext.NCD.Remove(GetNCDByID(ID));
+
+            if (_appDbContext.SaveChanges()==1)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

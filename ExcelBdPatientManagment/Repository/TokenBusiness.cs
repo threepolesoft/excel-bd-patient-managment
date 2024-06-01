@@ -40,7 +40,7 @@ namespace API.Repository
         public static bool Validation(string token)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes("tNXWEq9NNgNETnnLVIuUyRJfGe8vu7qu");
+            var key = Encoding.UTF8.GetBytes("tNdsffdsfdsffsXWsfsdffEq9NNgsdfdsfNETnnLdfsdssdffVdsfsIuUyRfdsfsqu");
 
             // Token validation parameters
             var tokenValidationParameters = new TokenValidationParameters

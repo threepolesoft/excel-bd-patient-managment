@@ -1,0 +1,19 @@
+﻿@model List<Common.Models.DbSet.NCD>
+@{
+   var sl = 0;
+}
+
+@foreach (var item in Model)
+{
+    sl++;
+
+    <tr data-id="@item.ID" data-name="@item.Name">
+        <th scope="row">@sl</th>
+        <td>@item.Name</td>
+        <td class="text-center">
+            <button type="button" class="btn btn-warning ncdListEdit"> <i class="fa fa-pen"></i></button>
+            <button type="button" class="btn btn-danger ncdListDelete"> <i class="fa fa-trash"></i></button>
+        </td>
+    </tr>
+
+}

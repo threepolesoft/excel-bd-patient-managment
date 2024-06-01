@@ -17,6 +17,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IToken, TokenBusiness>();
 builder.Services.AddScoped<IUserService, UserServiceBusiness>();
+builder.Services.AddScoped<INCD, NCDBusiness>();
+builder.Services.AddScoped<IAllergies, AllergiesBusiness>();
 
 IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

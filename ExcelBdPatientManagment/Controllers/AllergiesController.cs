@@ -11,28 +11,28 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NCDController : ControllerBase
+    public class AllergiesController : ControllerBase
     {
         Res res = new Res();
 
         private readonly IConfiguration config;
         private readonly IToken token;
         private readonly IUserService userService;
-        private readonly INCD _nCD;
-        public NCDController(
+        private readonly IAllergies _allergies;
+        public AllergiesController(
             IConfiguration config,
             IToken token,
             IUserService userService,
-            INCD nCD
+            IAllergies allergies
             )
         {
             this.config = config;
             this.token = token;
             this.userService = userService;
-            this._nCD = nCD;
+            this._allergies = allergies;
         }
 
-        // GET: api/<NCDController>
+        // GET: api/<AllergiesController>
         [HttpGet, TokenValidation]
         public ActionResult<Res> Get()
         {
@@ -42,7 +42,7 @@ namespace API.Controllers
 
                 res.Status = true;
                 res.Message = ActionStatus.Success;
-                res.Data = _nCD.GetAll();
+                res.Data = _allergies.GetAll();
                 return StatusCode((int)StatusCodes.Status200OK, res);
 
 
@@ -55,16 +55,16 @@ namespace API.Controllers
             }
         }
 
-        // GET api/<NCDController>/5
+        // GET api/<AllergiesController>/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/<NCDController>
+        // POST api/<AllergiesController>
         [HttpPost, TokenValidation]
-        public ActionResult<Res> Post([FromBody] NCDReqModel nCDReqModel)
+        public ActionResult<Res> Post([FromBody] AllergiesReqModel allergiesReqModel)
         {
             string getToken = Request.Headers.TryGetValue(HeaderNames.Authorization, out var tokenString) == true ?
                                 tokenString.FirstOrDefault().Replace("Bearer ", "") : "";
@@ -73,10 +73,10 @@ namespace API.Controllers
             {
                 ApplicationUser applicationUser = userService.UserByUserName(token.GetUserIdFromToken(getToken));
 
-                string status = _nCD.Save(new NCD
+                string status = _allergies.Save(new Allergies
                 {
-                    ID = nCDReqModel.ID,
-                    Name = nCDReqModel.Name,
+                    ID = allergiesReqModel.ID,
+                    Name = allergiesReqModel.Name,
                     EntryDate = DateTime.Now,
                     EntryUser = applicationUser.ID,
                     UpdateDate = DateTime.Now,
@@ -86,7 +86,7 @@ namespace API.Controllers
                 if (status == ActionStatus.Success)
                 {
                     res.Status = true;
-                    res.Message = string.Format("NCD save success");
+                    res.Message = string.Format("Allergies save success");
                     res.Data = null;
                     return StatusCode((int)StatusCodes.Status200OK, res);
                 }
@@ -107,26 +107,25 @@ namespace API.Controllers
             }
         }
 
-        // PUT api/<NCDController>/5
+        // PUT api/<AllergiesController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<NCDController>/5
-        [HttpDelete("{id}"), TokenValidation]
+        // DELETE api/<AllergiesController>/5
+        [HttpDelete("{id}")]
         public void Delete(int id)
         {
             try
             {
-                _nCD.Delete(id);
+                _allergies.Delete(id);
 
             }
             catch (Exception ex)
             {
 
             }
-
         }
     }
 }

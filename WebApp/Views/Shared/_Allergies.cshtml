@@ -3,15 +3,15 @@
     <div class="col-md-3">
 
         <input type="text"
-               id="newNcd"
-               class="form-control" placeholder="NCD Name" />
+               id="newAllergies"
+               class="form-control" placeholder="Allergies Name" />
 
     </div>
 
     <div class="col-md-1">
 
         <button type="button"
-                id="saveNcd"
+                id="saveAllergies"
                 data-id="0"
                 class="btn btn-success disabled">
             Save
@@ -21,7 +21,7 @@
     </div>
 
     <div class="col-md-4">
-        <div id="result"></div>
+        <div id="resultAllergies"></div>
     </div>
 
 </div>
@@ -38,7 +38,7 @@
                     <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
-            <tbody id="ncdList">
+            <tbody id="allergiesList">
             </tbody>
         </table>
 
@@ -53,29 +53,29 @@
     $(document).ready(function (e) {
 
 
-        NcdLoad();
+        AllergiesLoad();
 
     });
 
 
-    $(document).on("keyup", "#newNcd", function (e) {
+    $(document).on("keyup", "#newAllergies", function (e) {
 
-        $('#result').html("");
+        $('#resultAllergies').html("");
 
         if ($(this).val().trim() == "") {
 
-            $("#saveNcd").addClass("disabled");
+            $("#saveAllergies").addClass("disabled");
 
         } else {
 
-            $("#saveNcd").removeClass("disabled");
+            $("#saveAllergies").removeClass("disabled");
         }
 
     });
 
 
 
-    $(document).on("click", "#saveNcd", function (e) {
+    $(document).on("click", "#saveAllergies", function (e) {
 
         var id = 0;
 
@@ -87,12 +87,12 @@
 
         var data = {
             ID: id,
-            Name: $("#newNcd").val()
+            Name: $("#newAllergies").val()
         }
 
 
         $.ajax({
-            url: '@Url.Action("NcdSave", "Home")',
+            url: '@Url.Action("AllergiesSave", "Home")',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
@@ -100,19 +100,19 @@
 
                 if (res.error == "") {
 
-                    $('#result').html(res.message);
+                    $('#resultAllergies').html(res.message);
                     $("#saveNcd").text("Save");
-                    NcdLoad();
+                    AllergiesLoad();
 
                 } else {
 
-                    $('#result').html(res.error);
+                    $('#resultAllergies').html(res.error);
 
                 }
 
             },
             error: function (xhr, status, error) {
-                $('#result').html('<p>An error occurred: ' + error + '</p>');
+                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
             }
         });
 
@@ -130,7 +130,7 @@
 
         $("#saveNcd").removeClass("disabled");
         $("#saveNcd").text("Update");
-        $("#result").html("");
+        $("#resultAllergies").html("");
     });
 
     $(document).on("click", ".ncdListDelete", function (e) {
@@ -139,28 +139,26 @@
         var id = parent.attr("data-id");
         parent.remove();
 
-        debugger;
-
         $.ajax({
-            url: 'Home/Delete/' + id,
+            url: 'Home/AllergiesDelete/' + id,
             type: 'POST',
             contentType: 'application/json',
             success: function (res) {
 
                 if (res.error == "") {
 
-                    $('#result').html(res.message);
+                    $('#resultAllergies').html(res.message);
 
 
                 } else {
 
-                    $('#result').html(res.error);
+                    $('#resultAllergies').html(res.error);
 
                 }
 
             },
             error: function (xhr, status, error) {
-                $('#result').html('<p>An error occurred: ' + error + '</p>');
+                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
             }
         });
 
@@ -170,19 +168,21 @@
 
     });
 
-    function NcdLoad() {
+    function AllergiesLoad() {
 
         $.ajax({
-            url: '@Url.Action("NcdList", "Partial")',
+            url: '@Url.Action("AllergiesList", "Partial")',
             type: 'GET',
             dataType: 'html',
             success: function (res) {
 
-                $("#ncdList").html(res);
+                $("#allergiesList").html(res);
 
             },
             error: function (xhr, status, error) {
-                $('#result').html('<p>An error occurred: ' + error + '</p>');
+
+                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
+
             }
         });
 
