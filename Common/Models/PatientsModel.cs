@@ -17,7 +17,16 @@ namespace Common.Models
         public string PatientName { get; set; }
 
         [JsonPropertyName("DiseaseInformationID")]
-        public long DiseaseInformationID { get; set; }
+        public long DiseaseInformationID { get; set; }  
+        
+        [JsonPropertyName("Epilepsy")]
+        public bool Epilepsy { get; set; }
+
+        [JsonPropertyName("OthersNCDs")]
+        public List<int> OthersNCDs { get; set; }
+
+        [JsonPropertyName("Allergies")]
+        public List<int> Allergies { get; set; }
 
         // common field
         [JsonPropertyName("EntryDate")]

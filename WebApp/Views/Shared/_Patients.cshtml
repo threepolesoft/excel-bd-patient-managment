@@ -1,0 +1,184 @@
+﻿<div class="row mt-3">
+
+    <div class="col-md-6">
+    </div>
+
+
+    <div class="col-md-6">
+        <a href="/Home/PatientEntry">
+            <button type="button"
+                    data-id="0"
+                    style="float: right"
+                    class="btn btn-success">
+                Patient Entry
+            </button>
+        </a>
+
+    </div>
+
+</div>
+
+<div class="row  mt-2">
+
+    <div class="col-md-12">
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody id="allergiesList">
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    $(document).ready(function (e) {
+
+
+        AllergiesLoad();
+
+    });
+
+
+    $(document).on("keyup", "#newAllergies", function (e) {
+
+        $('#resultAllergies').html("");
+
+        if ($(this).val().trim() == "") {
+
+            $("#saveAllergies").addClass("disabled");
+
+        } else {
+
+            $("#saveAllergies").removeClass("disabled");
+        }
+
+    });
+
+
+
+    $(document).on("click", "#saveAllergies", function (e) {
+
+        var id = 0;
+
+        if ($(this).text() == "Update") {
+
+            id = $(this).attr("data-id");
+
+        }
+
+        var data = {
+            ID: id,
+            Name: $("#newAllergies").val()
+        }
+
+
+        $.ajax({
+            url: '@Url.Action("AllergiesSave", "Home")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (res) {
+
+                if (res.error == "") {
+
+                    $('#resultAllergies').html(res.message);
+                    $("#saveAllergies").text("Save");
+                    AllergiesLoad();
+
+                } else {
+
+                    $('#resultAllergies').html(res.error);
+
+                }
+
+            },
+            error: function (xhr, status, error) {
+                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
+            }
+        });
+
+    });
+
+    $(document).on("click", ".allergiesListEdit", function (e) {
+
+        var data = $(this).parents("tr");
+
+        var id = data.attr("data-id");
+        var name = data.attr("data-name");
+
+        $("#saveAllergies").attr("data-id", id);
+        $("#newAllergies").val(name);
+
+        $("#saveAllergies").removeClass("disabled");
+        $("#saveAllergies").text("Update");
+        $("#resultAllergies").html("");
+    });
+
+    $(document).on("click", ".allergiesListDelete", function (e) {
+
+        var parent = $(this).parents("tr");
+        var id = parent.attr("data-id");
+        parent.remove();
+
+        $.ajax({
+            url: 'Home/AllergiesDelete/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (res) {
+
+                if (res.error == "") {
+
+                    $("#saveAllergies").text("Save");
+                    $('#resultAllergies').html(res.message);
+
+
+                } else {
+
+                    $('#resultAllergies').html(res.error);
+
+                }
+
+            },
+            error: function (xhr, status, error) {
+                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
+            }
+        });
+
+
+
+
+
+    });
+
+    function AllergiesLoad() {
+
+        $.ajax({
+            url: '@Url.Action("AllergiesList", "Partial")',
+            type: 'GET',
+            dataType: 'html',
+            success: function (res) {
+
+                $("#allergiesList").html(res);
+
+            },
+            error: function (xhr, status, error) {
+
+                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
+
+            }
+        });
+
+    }
+
+</script>

@@ -237,5 +237,110 @@ namespace WebApp.Controllers
             });
         }
         #endregion
+
+
+        #region Patients
+
+        [HttpGet]
+        public IActionResult PatientEntry()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PatientSave([FromBody] PatientsModel patientsModel)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    string url = string.Format("{0}/api/Patient", Utils.BaseUrl);
+
+                    HttpClient httpClient = new HttpClient();
+
+                    ClaimsPrincipal user = HttpContext.User;
+
+                    // Retrieve the SerialNumber claim
+                    string serialNumberClaim = user.FindFirst(ClaimTypes.SerialNumber).Value;
+
+                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + serialNumberClaim);
+
+                    // Add any custom headers
+                    HttpResponseMessage result = await httpClient.PostAsJsonAsync(url, patientsModel);
+                    if (result.IsSuccessStatusCode)
+                    {
+
+                        var response = await result.Content.ReadFromJsonAsync<Res>();
+                        message = response.Message;
+
+                    }
+                    else
+                    {
+                        error = result.ReasonPhrase.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    error = ex.Message;
+                }
+            }
+
+            return Json(new
+            {
+                message = message,
+                error = message == "Process executed with error!" ? error : "",
+                data = ""
+            });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PatientsDelete(int id)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    string url = string.Format("{0}/api/Allergies/{1}", Utils.BaseUrl, id);
+
+                    HttpClient httpClient = new HttpClient();
+
+                    ClaimsPrincipal user = HttpContext.User;
+
+                    // Retrieve the SerialNumber claim
+                    string serialNumberClaim = user.FindFirst(ClaimTypes.SerialNumber).Value;
+
+                    httpClient.DefaultRequestHeaders.Add("Authorization", "Bearer " + serialNumberClaim);
+
+                    // Add any custom headers
+                    HttpResponseMessage result = await httpClient.DeleteAsync(url);
+                    if (result.IsSuccessStatusCode)
+                    {
+
+                        message = "NCD delete success";
+
+                    }
+                    else
+                    {
+                        error = result.ReasonPhrase.ToString();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    error = ex.Message;
+                }
+            }
+
+            return Json(new
+            {
+                message = message,
+                error = message == "Process executed with error!" ? error : "",
+                data = ""
+            });
+        }
+        #endregion
     }
 }
