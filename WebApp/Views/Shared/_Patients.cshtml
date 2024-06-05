@@ -1,4 +1,6 @@
-﻿<div class="row mt-3">
+﻿<link href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+
+<div class="row mt-3">
 
     <div class="col-md-6">
     </div>
@@ -26,11 +28,12 @@
             <thead class="thead-dark">
                 <tr>
                     <th scope="col">#</th>
-                    <th scope="col">Name</th>
+                    <th scope="col" class="text-center">Patient ID</th>
+                    <th scope="col">Patient Name</th>
                     <th scope="col" class="text-center">Action</th>
                 </tr>
             </thead>
-            <tbody id="allergiesList">
+            <tbody id="patientList">
             </tbody>
         </table>
 
@@ -38,6 +41,26 @@
 
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="patientListDetailsModal" tabindex="-1"
+     aria-labelledby="patientListDetailsModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Patient Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body patientDetails">
+               
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
@@ -45,136 +68,50 @@
     $(document).ready(function (e) {
 
 
-        AllergiesLoad();
-
-    });
-
-
-    $(document).on("keyup", "#newAllergies", function (e) {
-
-        $('#resultAllergies').html("");
-
-        if ($(this).val().trim() == "") {
-
-            $("#saveAllergies").addClass("disabled");
-
-        } else {
-
-            $("#saveAllergies").removeClass("disabled");
-        }
+        PatientLoad();
 
     });
 
 
 
-    $(document).on("click", "#saveAllergies", function (e) {
-
-        var id = 0;
-
-        if ($(this).text() == "Update") {
-
-            id = $(this).attr("data-id");
-
-        }
-
-        var data = {
-            ID: id,
-            Name: $("#newAllergies").val()
-        }
-
-
-        $.ajax({
-            url: '@Url.Action("AllergiesSave", "Home")',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            success: function (res) {
-
-                if (res.error == "") {
-
-                    $('#resultAllergies').html(res.message);
-                    $("#saveAllergies").text("Save");
-                    AllergiesLoad();
-
-                } else {
-
-                    $('#resultAllergies').html(res.error);
-
-                }
-
-            },
-            error: function (xhr, status, error) {
-                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
-            }
-        });
-
-    });
-
-    $(document).on("click", ".allergiesListEdit", function (e) {
-
-        var data = $(this).parents("tr");
-
-        var id = data.attr("data-id");
-        var name = data.attr("data-name");
-
-        $("#saveAllergies").attr("data-id", id);
-        $("#newAllergies").val(name);
-
-        $("#saveAllergies").removeClass("disabled");
-        $("#saveAllergies").text("Update");
-        $("#resultAllergies").html("");
-    });
-
-    $(document).on("click", ".allergiesListDelete", function (e) {
+    $(document).on("click", ".patientListDetails", function (e) {
 
         var parent = $(this).parents("tr");
         var id = parent.attr("data-id");
-        parent.remove();
 
         $.ajax({
-            url: 'Home/AllergiesDelete/' + id,
-            type: 'POST',
-            contentType: 'application/json',
-            success: function (res) {
-
-                if (res.error == "") {
-
-                    $("#saveAllergies").text("Save");
-                    $('#resultAllergies').html(res.message);
-
-
-                } else {
-
-                    $('#resultAllergies').html(res.error);
-
-                }
-
-            },
-            error: function (xhr, status, error) {
-                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
-            }
-        });
-
-
-
-
-
-    });
-
-    function AllergiesLoad() {
-
-        $.ajax({
-            url: '@Url.Action("AllergiesList", "Partial")',
+            url: 'Partial/PatientsDetails/' + id,
             type: 'GET',
             dataType: 'html',
             success: function (res) {
 
-                $("#allergiesList").html(res);
+                $(".patientDetails").html(res);
+
+            },
+            error: function (xhr, status, error) {
+               
+            }
+        });
+
+
+
+
+
+    });
+
+    function PatientLoad() {
+
+        $.ajax({
+            url: '@Url.Action("PatientList", "Partial")',
+            type: 'GET',
+            dataType: 'html',
+            success: function (res) {
+
+                $("#patientList").html(res);
 
             },
             error: function (xhr, status, error) {
 
-                $('#resultAllergies').html('<p>An error occurred: ' + error + '</p>');
 
             }
         });

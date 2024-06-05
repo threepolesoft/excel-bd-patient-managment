@@ -4,7 +4,7 @@ namespace API.Repository.Interface
 {
     public interface IPatient
     {
-        long GetID();
+        PatientDetailsModel GetPatientDetails(long ID);
         List<PatientsModel> GetAll();
         string Save(PatientsModel patientsModel);
 

@@ -17,11 +17,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IToken, TokenBusiness>();
 builder.Services.AddScoped<IUserService, UserServiceBusiness>();
+builder.Services.AddScoped<IDiseaseInformation, DiseaseInformationBusiness>();
 builder.Services.AddScoped<INCD, NCDBusiness>();
-builder.Services.AddScoped<IAllergies, AllergiesBusiness>();
-builder.Services.AddScoped<IPatient, PatientBusiness>();
 builder.Services.AddScoped<INCDDetails, NCDDetailsBusiness>();
+builder.Services.AddScoped<IAllergies, AllergiesBusiness>();
 builder.Services.AddScoped<IAllergiesDetails, AllergiesDetailsBusiness>();
+builder.Services.AddScoped<IPatient, PatientBusiness>();
 
 IConfiguration configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)

@@ -1,5 +1,8 @@
-﻿@{
+﻿@using Common.Models
+@{
     ViewData["Title"] = "Patient Entry";
+    int counter1 = 0;
+    int counter2 = 0;
 }
 
 <div class="text-center">
@@ -22,6 +25,8 @@
         <input type="text"
                id="patientName"
                class="form-control" />
+
+        <span class="alert-danger d-none patientNameRequired">Please input patient name</span>
         <input type="hidden"
                id="patientId"
                value="123"
@@ -34,11 +39,11 @@
         <label style="float: right">Diseases Name <span style="color: red">*</span></label>
     </div>
     <div class="col-md-9">
-        <select class="form-control"
-                id="diseaseInformationID">
-            <option value="1">DsI1</option>
-            <option value="2">DsI2</option>
-        </select>
+
+        @Html.DropDownList("diseaseInformationID",
+                 (IEnumerable<SelectListItem>)ViewBag.DiseaseInformation,
+                 "Select One", new { @class = "form-control select2" })
+        <span class="alert-danger d-none diseaseInformationIDRequired">Please select disease</span>
     </div>
 </div>
 
@@ -49,9 +54,11 @@
     <div class="col-md-9">
         <select class="form-control"
                 id="epilepsy">
+            <option>Select One</option>
             <option value="1">Yes</option>
             <option value="0">No</option>
         </select>
+        <span class="alert-danger d-none epilepsyRequired">Please select Epilepsy</span>
     </div>
 </div>
 
@@ -63,14 +70,27 @@
         <div class="row">
 
             <div class="col-md-5">
+
                 <select class="form-select"
                         id="dpNcds"
                         multiple
                         size="3" aria-label="size 3 select example"
                         style="height: 200px;">
-                    <option selected value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+
+                    @foreach (var item in (IEnumerable<NCDModel>)ViewBag.nCDModels)
+                    {
+                        if (counter1 == 0)
+                        {
+                            <option value="@item.ID" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+
+                        counter1++;
+                    }
+
                 </select>
             </div>
 
@@ -111,9 +131,21 @@
                         multiple
                         size="3" aria-label="size 3 select example"
                         style="height: 200px;">
-                    <option selected value="1">One</option>
-                    <option value="2">Two</option>
-                    <option value="3">Three</option>
+
+                    @foreach (var item in (IEnumerable<AllergiesModel>)ViewBag.allergiesModels)
+                    {
+                        if (counter2 == 0)
+                        {
+                            <option value="@item.ID" selected>@item.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@item.ID">@item.Name</option>
+                        }
+
+                        counter2++;
+                    }
+
                 </select>
             </div>
 
@@ -262,6 +294,10 @@
 
     $(document).on("click", "#savePatient", function (e) {
 
+        if (!validation()) {
+            return;
+        }
+
         var OthersNCDs = [];
         const dpNcdsSelected = Array.from(document.getElementById('dpNcdsSelected'));
 
@@ -317,4 +353,32 @@
 
     });
 
+    function validation() {
+
+        var vld = true;
+
+
+        if ($("#patientName").val().trim() == "") {
+            $(".patientNameRequired").removeClass("d-none");
+            vld = false;
+        } else {
+            $(".patientNameRequired").addClass("d-none");
+        }
+
+        if ($("#diseaseInformationID option:selected").index() == 0) {
+            $(".diseaseInformationIDRequired").removeClass("d-none");
+            vld = false;
+        } else {
+            $(".diseaseInformationIDRequired").addClass("d-none");
+        }
+
+        if ($("#epilepsy option:selected").index() == 0) {
+            $(".epilepsyRequired").removeClass("d-none");
+            vld = false;
+        } else {
+            $(".epilepsyRequired").addClass("d-none");
+        }
+
+        return vld;
+    }
 </script>

@@ -1,0 +1,26 @@
+﻿@model List<Common.Models.PatientsModel>
+@{
+    var sl = 0;
+}
+
+
+@foreach (var item in Model)
+{
+    sl++;
+
+    <tr data-id="@item.ID" data-name="@item.PatientName">
+        <th scope="row">@sl</th>
+        <td class="text-center">@item.ID</td>
+        <td>@item.PatientName</td>
+        <td class="text-center">
+            <button type="button" class="btn btn-seconday patientListDetails"
+                    data-bs-toggle="modal" data-bs-target="#patientListDetailsModal">
+                <i class="fa fa-eye"></i>
+            </button>
+        </td>
+    </tr>
+
+}
+
+
+

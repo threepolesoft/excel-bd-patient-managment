@@ -11,28 +11,28 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PatientController : ControllerBase
+    public class DiseaseController : ControllerBase
     {
         Res res = new Res();
 
         private readonly IConfiguration config;
         private readonly IToken token;
         private readonly IUserService userService;
-        private readonly IPatient _patient;
-        public PatientController(
+        private readonly IDiseaseInformation _diseaseInformation;
+        public DiseaseController(
             IConfiguration config,
             IToken token,
             IUserService userService,
-            IPatient patient
+            IDiseaseInformation diseaseInformation
             )
         {
             this.config = config;
             this.token = token;
             this.userService = userService;
-            this._patient = patient;
+            this._diseaseInformation = diseaseInformation;
         }
 
-        // GET: api/<PatientController>
+        // GET: api/<Disease>
         [HttpGet, TokenValidation]
         public ActionResult<Res> Get()
         {
@@ -42,9 +42,8 @@ namespace API.Controllers
 
                 res.Status = true;
                 res.Message = ActionStatus.Success;
-                res.Data = _patient.GetAll();
+                res.Data = _diseaseInformation.GetAll();
                 return StatusCode((int)StatusCodes.Status200OK, res);
-
 
             }
             catch (Exception ex)
@@ -55,31 +54,16 @@ namespace API.Controllers
             }
         }
 
-        // GET api/<PatientController>/5
-        [HttpGet("{id}"), TokenValidation]
-        public ActionResult<Res> Get(int id)
+        // GET api/<Disease>/5
+        [HttpGet("{id}")]
+        public string Get(int id)
         {
-            try
-            {
-
-                res.Status = true;
-                res.Message = ActionStatus.Success;
-                res.Data = _patient.GetPatientDetails(id);
-                return StatusCode((int)StatusCodes.Status200OK, res);
-
-
-            }
-            catch (Exception ex)
-            {
-                res.Status = false;
-                res.Message = ex.Message;
-                return StatusCode((int)StatusCodes.Status500InternalServerError, res);
-            }
+            return "value";
         }
 
-        // POST api/<PatientController>
+        // POST api/<Disease>
         [HttpPost, TokenValidation]
-        public ActionResult<Res> Post([FromBody] PatientsModel patientsModel)
+        public ActionResult<Res> Post([FromBody] DiseaseInformationModel diseaseInformationModel)
         {
             string getToken = Request.Headers.TryGetValue(HeaderNames.Authorization, out var tokenString) == true ?
                                 tokenString.FirstOrDefault().Replace("Bearer ", "") : "";
@@ -88,14 +72,10 @@ namespace API.Controllers
             {
                 ApplicationUser applicationUser = userService.UserByUserName(token.GetUserIdFromToken(getToken));
 
-                string status = _patient.Save(new PatientsModel
+                string status = _diseaseInformation.Save(new DiseaseInformationModel
                 {
-                    ID = patientsModel.ID,
-                    PatientName = patientsModel.PatientName,
-                    DiseaseInformationID = patientsModel.DiseaseInformationID,
-                    OthersNCDs = patientsModel.OthersNCDs,
-                    Allergies = patientsModel.Allergies,
-                    Epilepsy = patientsModel.Epilepsy,
+                    ID = diseaseInformationModel.ID,
+                    Name = diseaseInformationModel.Name,
                     EntryDate = DateTime.Now,
                     EntryUser = applicationUser.ID,
                     UpdateDate = DateTime.Now,
@@ -105,7 +85,7 @@ namespace API.Controllers
                 if (status == ActionStatus.Success)
                 {
                     res.Status = true;
-                    res.Message = string.Format("NCD save success");
+                    res.Message = string.Format("Disease save success");
                     res.Data = null;
                     return StatusCode((int)StatusCodes.Status200OK, res);
                 }
@@ -126,16 +106,25 @@ namespace API.Controllers
             }
         }
 
-        // PUT api/<PatientController>/5
+        // PUT api/<Disease>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
         }
 
-        // DELETE api/<PatientController>/5
+        // DELETE api/<Disease>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            try
+            {
+                _diseaseInformation.Delete(id);
+
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
     }
 }

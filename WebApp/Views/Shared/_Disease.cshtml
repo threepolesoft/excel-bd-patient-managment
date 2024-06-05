@@ -1,0 +1,192 @@
+﻿<div class="row mt-3">
+
+    <div class="col-md-3">
+
+        <input type="text"
+               id="newDisease"
+               class="form-control" placeholder="Disease Name" />
+
+    </div>
+
+    <div class="col-md-1">
+
+        <button type="button"
+                id="saveDisease"
+                data-id="0"
+                class="btn btn-success disabled">
+            Save
+        </button>
+
+
+    </div>
+
+    <div class="col-md-4">
+        <div id="resultDisease"></div>
+    </div>
+
+</div>
+
+<div class="row  mt-2">
+
+    <div class="col-md-12">
+
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col" class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tbody id="diseaseList">
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+
+    $(document).ready(function (e) {
+
+
+        DiseaseLoad();
+
+    });
+
+
+    $(document).on("keyup", "#newDisease", function (e) {
+
+        $('#resultDisease').html("");
+
+        if ($(this).val().trim() == "") {
+
+            $("#saveDisease").addClass("disabled");
+
+        } else {
+
+            $("#saveDisease").removeClass("disabled");
+        }
+
+    });
+
+
+
+    $(document).on("click", "#saveDisease", function (e) {
+
+        var id = 0;
+
+        if ($(this).text() == "Update") {
+
+            id = $(this).attr("data-id");
+
+        }
+
+        var data = {
+            ID: id,
+            Name: $("#newDisease").val()
+        }
+
+
+        $.ajax({
+            url: '@Url.Action("DiseaseSave", "Home")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            success: function (res) {
+
+                if (res.error == "") {
+
+                    $('#resultDisease').html(res.message);
+                    $("#saveDisease").text("Save");
+                    DiseaseLoad();
+
+                } else {
+
+                    $('#resultDisease').html(res.error);
+
+                }
+
+            },
+            error: function (xhr, status, error) {
+                $('#resultDisease').html('<p>An error occurred: ' + error + '</p>');
+            }
+        });
+
+    });
+
+    $(document).on("click", ".diseaseListEdit", function (e) {
+
+        var data = $(this).parents("tr");
+
+        var id = data.attr("data-id");
+        var name = data.attr("data-name");
+
+        $("#saveDisease").attr("data-id", id);
+        $("#newDisease").val(name);
+
+        $("#saveDisease").removeClass("disabled");
+        $("#saveDisease").text("Update");
+        $("#resultDisease").html("");
+    });
+
+    $(document).on("click", ".diseaseListDelete", function (e) {
+
+        var parent = $(this).parents("tr");
+        var id = parent.attr("data-id");
+        parent.remove();
+
+        $.ajax({
+            url: 'Home/DiseaseDelete/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            success: function (res) {
+
+                if (res.error == "") {
+
+                    $("#saveDisease").text("Save");
+                    $('#resultDisease').html(res.message);
+
+
+                } else {
+
+                    $('#resultDisease').html(res.error);
+
+                }
+
+            },
+            error: function (xhr, status, error) {
+                $('#resultDisease').html('<p>An error occurred: ' + error + '</p>');
+            }
+        });
+
+
+
+
+
+    });
+
+    function DiseaseLoad() {
+
+        $.ajax({
+            url: '@Url.Action("DiseaseList", "Partial")',
+            type: 'GET',
+            dataType: 'html',
+            success: function (res) {
+
+                $("#diseaseList").html(res);
+
+            },
+            error: function (xhr, status, error) {
+
+                $('#resultDisease').html('<p>An error occurred: ' + error + '</p>');
+
+            }
+        });
+
+    }
+
+</script>
