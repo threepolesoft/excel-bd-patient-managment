@@ -22,7 +22,8 @@
 
 <div class="row  mt-2">
 
-    <div class="col-md-12">
+    <div class="col-md-12"
+         style="height: 250px; overflow-y: scroll">
 
         <table class="table">
             <thead class="thead-dark">
@@ -37,6 +38,11 @@
             </tbody>
         </table>
 
+        <div class="patientListLoader">
+            <div style="text-align: center">
+                <img src="~/assets/images/loader.gif" />
+            </div>
+        </div>
     </div>
 
 </div>
@@ -76,6 +82,8 @@
 
     $(document).on("click", ".patientListDetails", function (e) {
 
+        LoaderOneShow(".patientDetails");
+
         var parent = $(this).parents("tr");
         var id = parent.attr("data-id");
 
@@ -84,7 +92,7 @@
             type: 'GET',
             dataType: 'html',
             success: function (res) {
-
+                LoaderOneHide(".patientDetails");
                 $(".patientDetails").html(res);
 
             },
@@ -101,12 +109,15 @@
 
     function PatientLoad() {
 
+        LoaderOneShow(".patientListLoader");
+
         $.ajax({
             url: '@Url.Action("PatientList", "Partial")',
             type: 'GET',
             dataType: 'html',
             success: function (res) {
 
+                LoaderOneHide(".patientListLoader");
                 $("#patientList").html(res);
 
             },

@@ -8,7 +8,7 @@
 
     </div>
 
-    <div class="col-md-1">
+    <div class="col-md-2">
 
         <button type="button"
                 id="saveNcd"
@@ -28,7 +28,8 @@
 
 <div class="row  mt-2">
 
-    <div class="col-md-12">
+    <div class="col-md-12"
+         style="height: 250px; overflow-y: scroll">
 
         <table class="table">
             <thead class="thead-dark">
@@ -41,6 +42,12 @@
             <tbody id="ncdList">
             </tbody>
         </table>
+
+        <div class="ncdListLoader">
+            <div style="text-align: center">
+                <img src="~/assets/images/loader.gif" />
+            </div>
+        </div>
 
     </div>
 
@@ -76,6 +83,8 @@
 
 
     $(document).on("click", "#saveNcd", function (e) {
+
+        ButtonLoaderShow("#saveNcd");
 
         var id = 0;
 
@@ -139,7 +148,6 @@
         var id = parent.attr("data-id");
         parent.remove();
 
-        debugger;
 
         $.ajax({
             url: 'Home/Delete/' + id,
@@ -173,12 +181,16 @@
 
     function NcdLoad() {
 
+
+        LoaderOneShow(".ncdListLoader");
+
         $.ajax({
             url: '@Url.Action("NcdList", "Partial")',
             type: 'GET',
             dataType: 'html',
             success: function (res) {
 
+                LoaderOneHide(".ncdListLoader");
                 $("#ncdList").html(res);
 
             },

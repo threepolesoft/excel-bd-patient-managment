@@ -8,7 +8,7 @@
 
     </div>
 
-    <div class="col-md-1">
+    <div class="col-md-2">
 
         <button type="button"
                 id="saveDisease"
@@ -28,7 +28,8 @@
 
 <div class="row  mt-2">
 
-    <div class="col-md-12">
+    <div class="col-md-12"
+         style="height: 250px; overflow-y: scroll">
 
         <table class="table">
             <thead class="thead-dark">
@@ -42,6 +43,11 @@
             </tbody>
         </table>
 
+        <div class="diseaseListLoader">
+            <div style="text-align: center">
+                <img src="~/assets/images/loader.gif" />
+            </div>
+        </div>
     </div>
 
 </div>
@@ -76,6 +82,9 @@
 
 
     $(document).on("click", "#saveDisease", function (e) {
+
+
+        ButtonLoaderShow("#saveDisease");
 
         var id = 0;
 
@@ -171,12 +180,15 @@
 
     function DiseaseLoad() {
 
+        LoaderOneShow(".diseaseListLoader");
+
         $.ajax({
             url: '@Url.Action("DiseaseList", "Partial")',
             type: 'GET',
             dataType: 'html',
             success: function (res) {
 
+                LoaderOneHide(".diseaseListLoader");
                 $("#diseaseList").html(res);
 
             },

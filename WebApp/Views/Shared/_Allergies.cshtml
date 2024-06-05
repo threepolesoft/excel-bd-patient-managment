@@ -8,7 +8,7 @@
 
     </div>
 
-    <div class="col-md-1">
+    <div class="col-md-2">
 
         <button type="button"
                 id="saveAllergies"
@@ -28,7 +28,8 @@
 
 <div class="row  mt-2">
 
-    <div class="col-md-12">
+    <div class="col-md-12"
+         style="height: 250px; overflow-y: scroll">
 
         <table class="table">
             <thead class="thead-dark">
@@ -41,6 +42,12 @@
             <tbody id="allergiesList">
             </tbody>
         </table>
+
+        <div class="allergiesListLoader">
+            <div style="text-align: center">
+                <img src="~/assets/images/loader.gif" />
+            </div>
+        </div>
 
     </div>
 
@@ -76,6 +83,8 @@
 
 
     $(document).on("click", "#saveAllergies", function (e) {
+
+        ButtonLoaderShow("#saveAllergies");
 
         var id = 0;
 
@@ -171,12 +180,15 @@
 
     function AllergiesLoad() {
 
+        LoaderOneShow(".allergiesListLoader");
+
         $.ajax({
             url: '@Url.Action("AllergiesList", "Partial")',
             type: 'GET',
             dataType: 'html',
             success: function (res) {
 
+                LoaderOneHide(".allergiesListLoader");
                 $("#allergiesList").html(res);
 
             },
